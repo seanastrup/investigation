@@ -1,7 +1,6 @@
 library(sjstats)
 # should make functional, but /shrug
 
-
 # Fear
 #########################
 fearAnovaData <- allSupplemental %>% 

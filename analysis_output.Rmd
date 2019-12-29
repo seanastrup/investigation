@@ -1,0 +1,822 @@
+---
+title: "Analysis"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r results='hide', echo=FALSE, include=FALSE}
+# this should all be functional, it sucks
+suppressMessages({
+  library(sjstats)
+  library(tidyverse)
+  library(readxl)
+  library(lsr)
+  source("supplemental_generation.R")
+})
+```
+
+```{r, echo=FALSE, results='hide', include=FALSE}
+# Fear
+#########################
+fearAnovaData <- allSupplemental %>% 
+  dplyr::filter(Experiment == "fear")
+fearDprimeAnova <- summary(
+  aov(
+    dPrime ~ Intensity * GroupSize + Error(ParticipantNumber / (Intensity * GroupSize)),
+    data = fearAnovaData
+  )
+)
+fearDprimeEtaSq <- sjstats::anova_stats(
+  aov(
+    dPrime ~ Intensity * GroupSize + Error(ParticipantNumber / (Intensity * GroupSize)),
+    data = fearAnovaData
+  )
+)
+fearCriterionAnova <- summary(
+  aov(
+    Criterion ~ Intensity * GroupSize + Error(ParticipantNumber / (Intensity * GroupSize)),
+    data = fearAnovaData
+  )
+)
+fearCriterionEtaSq <- sjstats::anova_stats(
+  aov(
+    Criterion ~ Intensity * GroupSize + Error(ParticipantNumber / (Intensity * GroupSize)),
+    data = fearAnovaData
+  )
+)
+
+# Noise
+#########################
+noiseAnovaData <- allSupplemental %>% 
+  dplyr::filter(Experiment == "noise")
+noiseDprimeAnova <- summary(
+  aov(
+    dPrime ~ Noise * GroupSize + Error(ParticipantNumber / (Noise * GroupSize)),
+    data = noiseAnovaData
+  )
+)
+noiseCriterionAnova <- summary(
+  aov(
+    Criterion ~ Noise * GroupSize + Error(ParticipantNumber / (Noise * GroupSize)),
+    data = noiseAnovaData
+  )
+)
+noiseDprimeEtaSq <- sjstats::anova_stats(
+  aov(
+    dPrime ~ Noise * GroupSize + Error(ParticipantNumber / (Noise * GroupSize)),
+    data = noiseAnovaData
+  )
+)
+noiseCriterionEtaSq<-sjstats::anova_stats(
+  aov(
+    Criterion ~ Noise * GroupSize + Error(ParticipantNumber / (Noise * GroupSize)),
+    data = noiseAnovaData
+  )
+)
+
+# Group Size Intensity Collapsed
+#########################
+groupSizeIntensityCollapsedAnovaData <- allSupplemental %>% 
+  dplyr::filter(Experiment == "group_size_intensity_collapsed")
+groupSizeIntensityCollapsedDprimeAnova <- summary(
+  aov(
+    dPrime ~ GroupSize + Error(ParticipantNumber / GroupSize),
+    data = groupSizeIntensityCollapsedAnovaData
+  )
+)
+groupSizeIntensityCollapsedCriterionAnova <- summary(
+  aov(
+    Criterion ~ GroupSize + Error(ParticipantNumber / GroupSize),
+    data = groupSizeIntensityCollapsedAnovaData
+  )
+)
+groupSizeIntensityCollapsedDprimeEtaSq <- sjstats::anova_stats(
+  aov(
+    dPrime ~ GroupSize + Error(ParticipantNumber / GroupSize),
+    data = groupSizeIntensityCollapsedAnovaData
+  )
+)
+groupSizeIntensityCollapsedCriterionEtaSq <- sjstats::anova_stats(
+  aov(
+    Criterion ~ GroupSize + Error(ParticipantNumber / GroupSize),
+    data = groupSizeIntensityCollapsedAnovaData
+  )
+)
+
+# Group Size Group Collapsed
+#########################
+groupSizeIGroupCollapsedAnovaData <- allSupplemental %>% 
+  dplyr::filter(Experiment == "group_size_group_collapsed")
+groupSizeGroupCollapsedDprimeAnova <- summary(
+  aov(
+    dPrime ~ Intensity + Error(ParticipantNumber / Intensity),
+    data = groupSizeIGroupCollapsedAnovaData
+  )
+)
+groupSizeGroupCollapsedCriterionAnova <- summary(
+  aov(
+    Criterion ~ Intensity + Error(ParticipantNumber / Intensity),
+    data = groupSizeIGroupCollapsedAnovaData
+  )
+)
+groupSizeGroupCollapsedDprimeEtaSq <- sjstats::anova_stats(
+  aov(
+    dPrime ~ Intensity + Error(ParticipantNumber / Intensity),
+    data = groupSizeIGroupCollapsedAnovaData
+  )
+)
+groupSizeGroupCollapsedCriterionEtaSq <- sjstats::anova_stats(
+  aov(
+    Criterion ~ Intensity + Error(ParticipantNumber / Intensity),
+    data = groupSizeIGroupCollapsedAnovaData
+  )
+)
+
+# Identity
+#########################
+identityAnovaData <- allSupplemental %>% 
+  dplyr::filter(Experiment == "identity")
+identityDprimeAnova <- summary(
+  aov(
+    dPrime ~ Intensity * IdentityCondition + Error(ParticipantNumber / (Intensity * IdentityCondition)),
+    data = identityAnovaData
+  )
+)
+identityCriterionAnova <- summary(
+  aov(
+    Criterion ~ Intensity * IdentityCondition + Error(ParticipantNumber / (Intensity * IdentityCondition)),
+    data = identityAnovaData
+  )
+)
+identityDprimeEtaSq <- sjstats::anova_stats(
+  aov(
+    dPrime ~ Intensity * IdentityCondition + Error(ParticipantNumber / (Intensity * IdentityCondition)),
+    data = identityAnovaData
+  )
+)
+identityCriterionEtaSq <- sjstats::anova_stats(
+  aov(
+    Criterion ~ Intensity * IdentityCondition + Error(ParticipantNumber / (Intensity * IdentityCondition)),
+    data = identityAnovaData
+  )
+)
+
+# Gender
+#########################
+genderAnovaData <- allSupplemental %>% 
+  dplyr::filter(Experiment == "gender_crowd_type")
+genderDprimeAnova <- summary(
+  aov(
+    dPrime ~ IntensityType * GroupType + Error(ParticipantNumber / (IntensityType * GroupType)),
+    data = genderAnovaData
+  )
+)
+genderCriterionAnova <- summary(
+  aov(
+    Criterion ~ IntensityType * GroupType + Error(ParticipantNumber / (IntensityType * GroupType)),
+    data = genderAnovaData
+  )
+)
+genderDprimeEtaSq <- sjstats::anova_stats(
+  aov(
+    dPrime ~ IntensityType * GroupType + Error(ParticipantNumber / (IntensityType * GroupType)),
+    data = genderAnovaData
+  )
+)
+genderCriterionEtaSq <- sjstats::anova_stats(
+  aov(
+    Criterion ~ IntensityType * GroupType + Error(ParticipantNumber / (IntensityType * GroupType)),
+    data = genderAnovaData
+  )
+)
+# Gender Group Size
+#########################
+genderGroupSizeAnovaData <- allSupplemental %>% 
+  dplyr::filter(
+    Experiment == "gender", 
+    Gender != 3
+  )
+genderGroupSizeDprimeAnova <- summary(
+  aov(
+    dPrime ~ Intensity * Gender * GroupSize + Error(ParticipantNumber / (Intensity * Gender * GroupSize)),
+    data = genderGroupSizeAnovaData
+  )
+)
+genderGroupSizeCriterionAnova <- summary(
+  aov(
+    Criterion ~ Intensity * Gender * GroupSize + Error(ParticipantNumber / (Intensity * Gender * GroupSize)),
+    data = genderGroupSizeAnovaData
+  )
+)
+genderGroupSizeDprimeEtaSq <- sjstats::anova_stats(
+  aov(
+    dPrime ~ Intensity * Gender * GroupSize + Error(ParticipantNumber / (Intensity * Gender * GroupSize)),
+    data = genderGroupSizeAnovaData
+  )
+)
+genderGroupSizeCriterionEtaSq <- sjstats::anova_stats(
+  aov(
+    Criterion ~ Intensity * Gender * GroupSize + Error(ParticipantNumber / (Intensity * Gender * GroupSize)),
+    data = genderGroupSizeAnovaData
+  )
+)
+
+# Crowd Vs Single
+#########################
+crowdSingleAnovaData <- allSupplemental %>%
+  dplyr::filter(Experiment == "crowdVsSingle")
+crowdSingleDprimeAnova <- summary(
+  aov(
+    dPrime ~ Intensity * GroupSize + Error(ParticipantNumber / (Intensity * GroupSize)),
+    data = crowdSingleAnovaData
+  )
+)
+crowdSingleCriterionAnova <- summary(
+  aov(
+    Criterion ~ Intensity * GroupSize + Error(ParticipantNumber / (Intensity * GroupSize)),
+    data = crowdSingleAnovaData
+  )
+)
+crowdSingleDprimeEtaSq <- sjstats::anova_stats(
+  aov(
+    dPrime ~ Intensity * GroupSize + Error(ParticipantNumber / (Intensity * GroupSize)),
+    data = crowdSingleAnovaData
+  )
+)
+crowdSingleCriterionEtaSq <- sjstats::anova_stats(
+  aov(
+    Criterion ~ Intensity * GroupSize + Error(ParticipantNumber / (Intensity * GroupSize)),
+    data = crowdSingleAnovaData
+  )
+)
+```
+
+## Crowd Vs. Single
+### dPrime ANOVA
+```{r echo=FALSE}
+crowdSingleDprimeAnova
+```
+
+### Criterion ANOVA
+```{r echo=FALSE}
+crowdSingleCriterionAnova
+```
+
+### dPrime eta Squared
+```{r echo=FALSE}
+crowdSingleDprimeEtaSq
+```
+
+### Criterion eta Squared
+```{r echo=FALSE}
+crowdSingleCriterionEtaSq
+```
+
+### T-Tests & Cohen's Ds
+```{r echo=FALSE}
+groupSizeGrouped <- allSupplemental %>% 
+  dplyr::filter(Experiment == "crowdVsSingle") %>% 
+  dplyr::group_by(ParticipantNumber, GroupSize) %>% 
+  dplyr::summarise(
+    meanDprime = mean(dPrime),
+    meanCriterion = mean(Criterion)
+  )
+
+single <- groupSizeGrouped %>% 
+  dplyr::filter(GroupSize == 1)
+
+crowd <- groupSizeGrouped %>% 
+  dplyr::filter(GroupSize == 12)
+
+singleCohenDPrime<- lsr::cohensD(single$meanDprime)
+singleTtestDPrime <- t.test(single$meanDprime)
+singleCohenCriterion<- lsr::cohensD(single$meanCriterion)
+singleTtestCriterion <- t.test(single$meanCriterion)
+
+crowdCohenDPrime<- lsr::cohensD(crowd$meanDprime)
+crowdTtestDPrime <- t.test(crowd$meanDprime)
+crowdCohenCriterion<- lsr::cohensD(crowd$meanCriterion)
+crowdTtestcriterion <- t.test(crowd$meanCriterion)  
+
+corrData <- cbind(single, crowd) %>% 
+  dplyr::ungroup() %>% 
+  dplyr::select(meanCriterion, meanCriterion1, meanDprime, meanDprime1) %>% 
+  dplyr::rename(
+    singleC = meanCriterion, 
+    crowdC = meanCriterion1, 
+    singleD = meanDprime,
+    crowdD = meanDprime1
+  ) %>% 
+  dplyr::mutate(
+    DprimeDiff = crowdD - singleD, 
+    CriterionDiff = crowdC - singleC
+  )
+
+criterionLinearMod <- lm(singleC ~ crowdC, data = corrData)
+criterionRsquared <- summary(criterionLinearMod)$r.squared
+
+singleTtestcriterion
+singleCohenCriterion
+singleTtestDPrime
+singleCohenDPrime
+
+crowdTtestcriterion
+crowdCohenDPrime
+crowdTtestDPrime
+crowdCohenDPrime
+```
+
+### R Squared
+```{r, echo=FALSE}
+criterionRsquared
+```
+
+## Fear
+### dPrime ANOVA
+```{r echo=FALSE}
+fearDprimeAnova
+```
+
+### Criterion ANOVA
+```{r echo=FALSE}
+fearCriterionAnova
+```
+
+### dPrime eta Squared
+```{r echo=FALSE}
+fearDprimeEtaSq
+```
+
+### Criterion eta Squared
+```{r echo=FALSE}
+fearCriterionEtaSq
+```
+
+### T Tests & Cohen's D
+```{r echo=FALSE}
+groupSizeGrouped <- allSupplemental %>% 
+  dplyr::filter(Experiment == "fear") %>% 
+  dplyr::group_by(ParticipantNumber, GroupSize) %>% 
+  dplyr::summarise(
+    meanDprime = mean(dPrime),
+    meanCriterion = mean(Criterion)
+  )
+
+single <- groupSizeGrouped %>% 
+  dplyr::filter(GroupSize == 1)
+
+crowd <- groupSizeGrouped %>% 
+  dplyr::filter(GroupSize == 12)
+
+singleCohenDPrime<- lsr::cohensD(single$meanDprime)
+singleTtestDPrime <- t.test(single$meanDprime)
+singleCohenCriterion<- lsr::cohensD(single$meanCriterion)
+singleTtestcriterion <- t.test(single$meanCriterion)
+
+crowdCohenDPrime<- lsr::cohensD(crowd$meanDprime)
+crowdTtestDPrime <- t.test(crowd$meanDprime)
+crowdCohenCriterion<- lsr::cohensD(crowd$meanCriterion)
+crowdTtestcriterion <- t.test(crowd$meanCriterion)  
+
+corrData <- cbind(single, crowd) %>% 
+  dplyr::ungroup() %>% 
+  dplyr::select(meanCriterion, meanCriterion1, meanDprime, meanDprime1) %>% 
+  dplyr::rename(
+    singleC = meanCriterion, 
+    crowdC = meanCriterion1, 
+    singleD = meanDprime,
+    crowdD = meanDprime1
+  ) %>% 
+  dplyr::mutate(
+    DprimeDiff = crowdD - singleD, 
+    CriterionDiff = crowdC - singleC
+  )
+
+criterionLinearMod <- lm(singleC ~ crowdC, data = corrData)
+criterionRsquared <- summary(criterionLinearMod)$r.squared
+
+singleTtestcriterion
+singleCohenCriterion
+singleTtestDPrime
+singleCohenDPrime
+
+crowdTtestcriterion
+crowdCohenCriterion
+crowdTtestDPrime
+crowdCohenDPrime
+```
+
+### R Squared
+```{r}
+criterionRsquared
+```
+
+### Noise
+### dPrime ANOVA
+```{r echo=FALSE}
+noiseDprimeAnova
+```
+
+### Criterion ANOVA
+```{r echo=FALSE}
+noiseCriterionAnova
+```
+
+### dPrime eta Squared
+```{r echo=FALSE}
+noiseDprimeEtaSq
+```
+
+### Criterion eta Squared
+```{r echo=FALSE}
+noiseCriterionEtaSq
+```
+
+### T Tests & Cohen's D
+```{r echo=FALSE}
+groupSizeGrouped <- allSupplemental %>% 
+  dplyr::filter(Experiment == "noise") %>% 
+  dplyr::group_by(ParticipantNumber, GroupSize) %>% 
+  dplyr::summarise(
+    meanDprime = mean(dPrime),
+    meanCriterion = mean(Criterion)
+  )
+
+single <- groupSizeGrouped %>% 
+  dplyr::filter(GroupSize == 1)
+
+crowd <- groupSizeGrouped %>% 
+  dplyr::filter(GroupSize == 12)
+
+singleCohenDPrime<- lsr::cohensD(single$meanDprime)
+singleTtestDPrime <- t.test(single$meanDprime)
+singleCohenCriterion<- lsr::cohensD(single$meanCriterion)
+singleTtestcriterion <- t.test(single$meanCriterion)
+
+crowdCohenDPrime<- lsr::cohensD(crowd$meanDprime)
+crowdTtestDPrime <- t.test(crowd$meanDprime)
+crowdCohenCriterion<- lsr::cohensD(crowd$meanCriterion)
+crowdTtestcriterion <- t.test(crowd$meanCriterion)  
+
+corrData <- cbind(single, crowd) %>% 
+  dplyr::ungroup() %>% 
+  dplyr::select(meanCriterion, meanCriterion1, meanDprime, meanDprime1) %>% 
+  dplyr::rename(
+    singleC = meanCriterion, 
+    crowdC = meanCriterion1, 
+    singleD = meanDprime,
+    crowdD = meanDprime1
+  ) %>% 
+  dplyr::mutate(
+    DprimeDiff = crowdD - singleD, 
+    CriterionDiff = crowdC - singleC
+  )
+
+criterionLinearMod <- lm(singleC ~ crowdC, data = corrData)
+criterionRsquared <- summary(criterionLinearMod)$r.squared
+
+singleTtestcriterion
+singleCohenCriterion
+singleTtestDPrime
+singleCohenDPrime
+
+crowdTtestcriterion
+crowdCohenCriterion
+crowdTtestDPrime
+crowdCohenDPrime
+```
+
+### R Squared
+```{r}
+criterionRsquared
+```
+
+## Crowd Size (Intensity Collapsed)
+### dPrime ANOVA
+```{r echo=FALSE}
+groupSizeIntensityCollapsedDprimeAnova
+```
+
+### Criterion ANOVA
+```{r echo=FALSE}
+groupSizeIntensityCollapsedCriterionAnova
+```
+
+### dPrime eta Squared
+```{r echo=FALSE}
+groupSizeIntensityCollapsedDprimeEtaSq
+```
+
+### Criterion eta Squared
+```{r echo=FALSE}
+groupSizeIntensityCollapsedCriterionEtaSq
+```
+
+## Crowd Size (Group Collapsed)
+### dPrime ANOVA
+```{r echo=FALSE}
+groupSizeGroupCollapsedDprimeAnova
+```
+
+### Criterion ANOVA
+```{r echo=FALSE}
+groupSizeGroupCollapsedCriterionAnova
+```
+
+### dPrime eta Squared
+```{r echo=FALSE}
+groupSizeGroupCollapsedDprimeEtaSq
+```
+
+### Criterion eta Squared
+```{r echo=FALSE}
+groupSizeGroupCollapsedCriterionEtaSq
+```
+
+## Identity
+### dPrime ANOVA
+```{r echo=FALSE}
+identityDprimeAnova
+```
+
+### Criterion ANOVA
+```{r echo=FALSE}
+identityCriterionAnova
+```
+
+### dPrime eta Squared
+```{r echo=FALSE}
+identityDprimeEtaSq
+```
+
+### Criterion eta Squared
+```{r echo=FALSE}
+identityCriterionEtaSq
+```
+
+### T Tests & Cohen's D
+```{r echo=FALSE}
+groupSizeGrouped <- allSupplemental %>% 
+  dplyr::filter(
+    Experiment == "identity",
+    IdentityCondition != 1
+  ) %>%
+  dplyr::group_by(ParticipantNumber, Intensity, IdentityCondition) %>% 
+  dplyr::summarise(
+    meanDprime = mean(dPrime),
+    meanCriterion = mean(Criterion)
+  )
+
+intensity1 <- groupSizeGrouped %>% dplyr::filter(Intensity == 1)
+intensity10 <- groupSizeGrouped %>% dplyr::filter(Intensity == 10)
+intensity20 <- groupSizeGrouped %>% dplyr::filter(Intensity == 20)
+intensity30 <- groupSizeGrouped %>% dplyr::filter(Intensity == 30)
+intensity40 <- groupSizeGrouped %>% dplyr::filter(Intensity == 40)
+intensity50 <- groupSizeGrouped %>% dplyr::filter(Intensity == 50)
+
+intensity1DPrimeTtest <- t.test(
+  meanDprime ~ IdentityCondition, 
+  paired = TRUE, 
+  data = intensity1
+)
+intensity10DPrimeTtest <- t.test(
+  meanDprime ~ IdentityCondition, 
+  paired = TRUE, 
+  data = intensity10
+)
+intensity20DPrimeTtest <- t.test(
+  meanDprime ~ IdentityCondition, 
+  paired = TRUE, 
+  data = intensity20
+)
+intensity30DPrimeTtest <- t.test(
+  meanDprime ~ IdentityCondition, 
+  paired = TRUE, 
+  data = intensity30
+)
+intensity40DPrimeTtest <- t.test(
+  meanDprime ~ IdentityCondition, 
+  paired = TRUE, 
+  data = intensity40
+)
+intensity50DPrimeTtest <- t.test(
+  meanDprime ~ IdentityCondition, 
+  paired = TRUE, 
+  data = intensity50
+)
+
+intensity1CriterionTtest <- t.test(
+  meanCriterion ~ IdentityCondition, 
+  paired = TRUE, 
+  data = intensity1
+)
+intensity10CriterionTtest <- t.test(
+  meanCriterion ~ IdentityCondition, 
+  paired = TRUE, 
+  data = intensity10
+)
+intensity20CriterionTtest <- t.test(
+  meanCriterion ~ IdentityCondition, 
+  paired = TRUE, 
+  data = intensity20
+)
+intensity30CriterionTtest <- t.test(
+  meanCriterion ~ IdentityCondition, 
+  paired = TRUE, 
+  data = intensity30
+)
+intensity40CriterionTtest <- t.test(
+  meanCriterion ~ IdentityCondition, 
+  paired = TRUE, 
+  data = intensity40
+)
+intensity50CriterionTtest <- t.test(
+  meanCriterion ~ IdentityCondition, 
+  paired = TRUE, 
+  data = intensity50
+)
+
+groupSizeGrouped <- allSupplemental %>% 
+  dplyr::filter(
+    Experiment == "identity"
+  ) %>%
+  dplyr::group_by(ParticipantNumber, IdentityCondition) %>% 
+  dplyr::summarise(
+    meanDprime = mean(dPrime),
+    meanCriterion = mean(Criterion)
+  )
+
+single <- groupSizeGrouped %>% 
+  dplyr::filter(IdentityCondition == 1)
+
+homogeneousCrowd <- groupSizeGrouped %>% 
+  dplyr::filter(IdentityCondition == 2)
+
+heterogeneousCrowd <- groupSizeGrouped %>% 
+  dplyr::filter(IdentityCondition == 3)
+
+singleCohenDPrime<- lsr::cohensD(single$meanDprime)
+singleTtestDPrime <- t.test(single$meanDprime)
+singleCohenCriterion<- lsr::cohensD(single$meanCriterion)
+singleTtestcriterion <- t.test(single$meanCriterion)
+
+heterogeneousCrowdCohenDPrime<- lsr::cohensD(heterogeneousCrowd$meanDprime)
+heterogeneousCrowdTtestDPrime <- t.test(heterogeneousCrowd$meanDprime)
+heterogeneousCrowdCohenCriterion<- lsr::cohensD(heterogeneousCrowd$meanCriterion)
+heterogeneousCrowdTtestcriterion <- t.test(heterogeneousCrowd$meanCriterion)  
+
+homogeneousCrowdCohenDPrime<- lsr::cohensD(homogeneousCrowd$meanDprime)
+homogeneousCrowdTtestDPrime <- t.test(homogeneousCrowd$meanDprime)
+homogeneousCrowdCohenCriterion<- lsr::cohensD(homogeneousCrowd$meanCriterion)
+homogeneousCrowdTtestcriterion <- t.test(homogeneousCrowd$meanCriterion)  
+
+singleTtestcriterion
+singleCohenCriterion
+singleTtestDPrime
+singleCohenDPrime
+
+crowdTtestcriterion
+crowdCohenCriterion
+crowdTtestDPrime
+crowdCohenDPrime
+```
+
+## Gender By Group Size (No Mixed Group)
+### dPrime ANOVA
+```{r echo=FALSE}
+genderGroupSizeDprimeAnova
+```
+
+### Criterion ANOVA
+```{r echo=FALSE}
+genderGroupSizeCriterionAnova
+```
+
+### dPrime eta Squared
+```{r echo=FALSE}
+genderGroupSizeDprimeEtaSq
+```
+
+### Criterion eta Squared
+```{r echo=FALSE}
+genderGroupSizeCriterionEtaSq
+```
+
+### T Tests & Cohen's D
+```{r}
+groupSizeGrouped <- allSupplemental %>% 
+  dplyr::filter(
+    Experiment == "gender",
+    Gender != 3
+  ) %>%
+  dplyr::group_by(ParticipantNumber, Gender, GroupSize) %>% 
+  dplyr::summarise(
+    meanDprime = mean(dPrime),
+    meanCriterion = mean(Criterion)
+  )
+
+single <- groupSizeGrouped %>% dplyr::filter(GroupSize == 1)
+singleMale <- single %>% 
+  dplyr::filter(Gender == 1) %>% 
+  dplyr::ungroup() %>%
+  dplyr::select(meanCriterion) %>% 
+  dplyr::pull()
+singleFemale <- single %>% 
+  dplyr::filter(Gender == 2) %>% 
+  dplyr::ungroup() %>%
+  dplyr::select(meanCriterion) %>% 
+  dplyr::pull() 
+
+crowd <- groupSizeGrouped %>% filter(GroupSize == 12)
+crowdMale <- crowd %>% 
+  dplyr::filter(Gender == 1) %>% 
+  dplyr::ungroup() %>%
+  dplyr::select(meanCriterion) %>% 
+  dplyr::pull()
+crowdFemale <- crowd %>% 
+  dplyr::filter(Gender == 2) %>% 
+  dplyr::ungroup() %>%
+  dplyr::select(meanCriterion) %>% 
+  dplyr::pull() 
+
+singleTtestCriterion <- t.test(singleMale, singleFemale, paired = TRUE)
+singleCohenCriterion <- lsr::cohensD(singleMale, singleFemale)
+crowdTtestCriterion <- t.test(meanCriterion ~ Gender, paired = TRUE, data = crowd)
+crowdCohenCriterion <- lsr::cohensD(crowdMale, crowdFemale)
+
+
+groupSizeGrouped <- allSupplemental %>% 
+  dplyr::filter(
+    Experiment == "gender",
+    Gender != 3,
+    Intensity %in% c(30, 40, 50)
+  ) %>%
+  dplyr::group_by(ParticipantNumber, Gender, GroupSize) %>% 
+  dplyr::summarise(
+    meanDprime = mean(dPrime),
+    meanCriterion = mean(Criterion)
+  )
+
+single <- groupSizeGrouped %>% dplyr::filter(GroupSize == 1)
+singleMale <- single %>% 
+  dplyr::filter(Gender == 1) %>% 
+  dplyr::ungroup() %>%
+  dplyr::select(meanCriterion) %>% 
+  dplyr::pull()
+singleFemale <- single %>% 
+  dplyr::filter(Gender == 2) %>% 
+  dplyr::ungroup() %>%
+  dplyr::select(meanCriterion) %>% 
+  dplyr::pull() 
+
+crowd <- groupSizeGrouped %>% filter(GroupSize == 12)
+crowdMale <- crowd %>% 
+  dplyr::filter(Gender == 1) %>% 
+  dplyr::ungroup() %>%
+  dplyr::select(meanCriterion) %>% 
+  dplyr::pull()
+crowdFemale <- crowd %>% 
+  dplyr::filter(Gender == 2) %>% 
+  dplyr::ungroup() %>%
+  dplyr::select(meanCriterion) %>% 
+  dplyr::pull() 
+
+singleFemaleTtestCriterion <- t.test(singleFemale)
+singleFemaleCohenCriterion <- lsr::cohensD(singleFemale)
+crowdFemaleTTestCriterion <- t.test(crowdFemale)
+crowdFemaleCohenCriterion <- lsr::cohensD(crowdFemale)
+
+singleMaleTtestCriterion <- t.test(singleMale)
+singleMaleCohenCriterion <- lsr::cohensD(singleMale)
+crowdMaleTTestCriterion <- t.test(crowdMale)
+crowdMaleCohenCriterion <- lsr::cohensD(crowdMale)
+```
+
+
+## All Gender Combinations & Low-High Intensity Split
+### dPrime ANOVA
+```{r echo=FALSE}
+genderDprimeAnova
+```
+
+### Criterion ANOVA
+```{r echo=FALSE}
+genderCriterionAnova
+```
+
+### dPrime eta Squared
+```{r echo=FALSE}
+genderDprimeEtaSq
+```
+
+### Criterion eta Squared
+```{r echo=FALSE}
+genderCriterionEtaSq
+```
+
+
+
