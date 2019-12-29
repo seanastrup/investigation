@@ -139,8 +139,11 @@ MergeFiles <- function(investigation, fields) {
 
 # merge all individual's data
 fear <- MergeFiles(CONTROLS$fear$investigation, CONTROLS$fear$fields)
-crowdVsSingle_repair <- MergeFiles(CONTROLS$crowd_vs_single$investigation, CONTROLS$crowd_vs_single$fields)
-gender <- MergeFiles(CONTROLS$gender$investigation, CONTROLS$gender$fields)
+crowdVsSingle_repair <- MergeFiles(
+  CONTROLS$crowd_vs_single$investigation, 
+  CONTROLS$crowd_vs_single$fields
+)
+gender_repair <- MergeFiles(CONTROLS$gender$investigation, CONTROLS$gender$fields)
 identity <- MergeFiles(CONTROLS$identity$investigation, CONTROLS$identity$fields)
 noise <- MergeFiles(CONTROLS$noise$investigation, CONTROLS$noise$fields)
 size <- MergeFiles(CONTROLS$size$investigation, CONTROLS$size$fields)
@@ -196,7 +199,40 @@ crowdVsSingle <- crowdVsSingle_repair %>%
   ) %>% 
   dplyr::select(-Emotion_DELETE)
 
-
+# Also clean gender data because it sucks
+gender <- gender_repair %>% 
+  dplyr::mutate(
+    GroupType = ifelse(
+      Gender == 1 & GroupSize == 1, 
+      1, 
+      ifelse(
+        Gender == 2 & GroupSize == 1,
+        2,
+        ifelse(
+          Gender == 1 & GroupSize == 12,
+          3,
+          ifelse(
+            Gender == 2 & GroupSize == 12,
+            4,
+            ifelse(
+              Gender == 3 & GroupSize == 12, 
+              5, 
+              NA
+            )
+          )
+        )
+      )
+    ), 
+    IntensityType = ifelse(
+      Intensity %in% c(1, 10, 20),
+      "Low",
+      ifelse(
+        Intensity %in% c(30, 40, 50),
+        "High",
+        NA
+      )
+    )
+  )
 
 # Get Zack's compiled data
 GetFearCompiled <- function() {

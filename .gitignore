@@ -1,3 +1,5 @@
+*.Rapp*
+*.txt
 *.Rproj
 .Rproj.user
 .Rhistory

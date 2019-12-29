@@ -2,6 +2,8 @@ setwd("~/Projects/merge")
 library(tidyverse)
 library(rlang)
 
+# source merged dataframes must exist prior to supplemental generation
+
 GenerateCalculations <- function(df, condition, experiment) { 
   groupByVars <- rlang::syms(condition)
   
@@ -63,11 +65,15 @@ GenerateCalculations <- function(df, condition, experiment) {
   return(summarizedDf)
 }
 
+#Experiment supplementals generation
+#################### 
+
 supplementalFear <- GenerateCalculations(
   fear, 
   c("GroupSize", "Intensity"), 
   "fear"
-)
+) %>% 
+  dplyr::filter(ParticipantNumber != 31)
 
 supplementalNoise <- GenerateCalculations(
   noise,
@@ -79,24 +85,33 @@ supplementalIdentity <- GenerateCalculations(
   identity,
   c("Intensity", "Condition"),
   "identity"
-)
+) %>% 
+  dplyr::filter(ParticipantNumber < 31)
 
 supplementalSizeIntCollapse <- GenerateCalculations(
   size,
   c("GroupSize"),
-  "group_size_inensity_collapsed"
-)
+  "group_size_intensity_collapsed"
+) %>% 
+  dplyr::filter(ParticipantNumber != 31)
 
 supplementalSizeGroupCollapse <- GenerateCalculations(
   size,
   c("Intensity"),
   "group_size_group_collapsed"
-)
+) %>% 
+  dplyr::filter(ParticipantNumber != 31)
 
 supplementalGender <- GenerateCalculations(
   gender,
   c("GroupSize", "Gender", "Intensity"),
   "gender"
+)
+
+supplementalCrowdTypeGender <- GenerateCalculations(
+  gender,
+  c("GroupType", "IntensityType"),
+  "gender_crowd_type"
 )
 
 supplementalCrowdVsSingle <- GenerateCalculations(
@@ -105,16 +120,42 @@ supplementalCrowdVsSingle <- GenerateCalculations(
   "crowdVsSingle"
 )
 
-allSupplemental <- rbind(
-  supplementalCrowdVsSingle,
-  supplementalFear, 
-  supplementalNoise,
-  supplementalSizeIntCollapse,
-  supplementalSizeGroupCollapse,
-  supplementalIdentity,
-  supplementalGender
-)
+allSupplemental <- 
+  rbind(
+    supplementalCrowdVsSingle,
+    supplementalFear, 
+    supplementalNoise,
+    supplementalSizeIntCollapse,
+    supplementalSizeGroupCollapse,
+    supplementalIdentity,
+    supplementalGender,
+    supplementalCrowdTypeGender
+  ) %>% 
+  dplyr::rename(
+    IdentityCondition = Condition,
+    TotalHits = totalHits,
+    TotalCorrectRejections = totalCorrectRejections,
+    TotalFalseAlarms = totalFalseAlarms, 
+    TotalMisses = totalMisses
+  ) %>%
+  dplyr::select(
+    Experiment, ParticipantNumber, GroupSize, Intensity, Noise, 
+    IdentityCondition, Gender, dPrime, Criterion, TotalHits, TotalFalseAlarms, 
+    TotalMisses, TotalCorrectRejections, HitRate, FalseAlarmRate, 
+    HitRateReplaced, FalseAlarmReplaced, GroupType, IntensityType
+  )
 
+allSupplemental$ParticipantNumber <- as.factor(allSupplemental$ParticipantNumber)
+allSupplemental$Experiment <- as.factor(allSupplemental$Experiment)
+allSupplemental$GroupSize <- as.factor(allSupplemental$GroupSize)
+allSupplemental$Intensity <- as.factor(allSupplemental$Intensity)
+allSupplemental$Noise <- as.factor(allSupplemental$Noise)
+allSupplemental$IdentityCondition <- as.factor(allSupplemental$IdentityCondition)
+allSupplemental$Gender <- as.factor(allSupplemental$Gender)
+allSupplemental$GroupType <- as.factor(allSupplemental$GroupType)
+allSupplemental$IntensityType <- as.factor(allSupplemental$IntensityType)
+
+######################################
+# Write all supplementals to csv
 write.csv(allSupplemental, "test_delete.csv", row.names = FALSE)
-
 
