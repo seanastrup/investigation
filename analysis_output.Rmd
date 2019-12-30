@@ -257,27 +257,27 @@ crowdSingleCriterionEtaSq <- sjstats::anova_stats(
 
 ## Crowd Vs. Single
 ### dPrime ANOVA
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 crowdSingleDprimeAnova
 ```
 
 ### Criterion ANOVA
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 crowdSingleCriterionAnova
 ```
 
 ### dPrime eta Squared
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 crowdSingleDprimeEtaSq
 ```
 
 ### Criterion eta Squared
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 crowdSingleCriterionEtaSq
 ```
 
 ### T-Tests & Cohen's Ds
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 groupSizeGrouped <- allSupplemental %>% 
   dplyr::filter(Experiment == "crowdVsSingle") %>% 
   dplyr::group_by(ParticipantNumber, GroupSize) %>% 
@@ -300,7 +300,7 @@ singleTtestCriterion <- t.test(single$meanCriterion)
 crowdCohenDPrime<- lsr::cohensD(crowd$meanDprime)
 crowdTtestDPrime <- t.test(crowd$meanDprime)
 crowdCohenCriterion<- lsr::cohensD(crowd$meanCriterion)
-crowdTtestcriterion <- t.test(crowd$meanCriterion)  
+crowdTtestCriterion <- t.test(crowd$meanCriterion)  
 
 corrData <- cbind(single, crowd) %>% 
   dplyr::ungroup() %>% 
@@ -319,45 +319,45 @@ corrData <- cbind(single, crowd) %>%
 criterionLinearMod <- lm(singleC ~ crowdC, data = corrData)
 criterionRsquared <- summary(criterionLinearMod)$r.squared
 
-singleTtestcriterion
+singleTtestCriterion
 singleCohenCriterion
 singleTtestDPrime
 singleCohenDPrime
 
-crowdTtestcriterion
+crowdTtestCriterion
 crowdCohenDPrime
 crowdTtestDPrime
 crowdCohenDPrime
 ```
 
 ### R Squared
-```{r, echo=FALSE}
+```{r echo=FALSE, comment=NA}
 criterionRsquared
 ```
 
 ## Fear
 ### dPrime ANOVA
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 fearDprimeAnova
 ```
 
 ### Criterion ANOVA
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 fearCriterionAnova
 ```
 
 ### dPrime eta Squared
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 fearDprimeEtaSq
 ```
 
 ### Criterion eta Squared
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 fearCriterionEtaSq
 ```
 
 ### T Tests & Cohen's D
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 groupSizeGrouped <- allSupplemental %>% 
   dplyr::filter(Experiment == "fear") %>% 
   dplyr::group_by(ParticipantNumber, GroupSize) %>% 
@@ -375,12 +375,12 @@ crowd <- groupSizeGrouped %>%
 singleCohenDPrime<- lsr::cohensD(single$meanDprime)
 singleTtestDPrime <- t.test(single$meanDprime)
 singleCohenCriterion<- lsr::cohensD(single$meanCriterion)
-singleTtestcriterion <- t.test(single$meanCriterion)
+singleTtestCriterion <- t.test(single$meanCriterion)
 
 crowdCohenDPrime<- lsr::cohensD(crowd$meanDprime)
 crowdTtestDPrime <- t.test(crowd$meanDprime)
 crowdCohenCriterion<- lsr::cohensD(crowd$meanCriterion)
-crowdTtestcriterion <- t.test(crowd$meanCriterion)  
+crowdTtestCriterion <- t.test(crowd$meanCriterion)  
 
 corrData <- cbind(single, crowd) %>% 
   dplyr::ungroup() %>% 
@@ -399,45 +399,45 @@ corrData <- cbind(single, crowd) %>%
 criterionLinearMod <- lm(singleC ~ crowdC, data = corrData)
 criterionRsquared <- summary(criterionLinearMod)$r.squared
 
-singleTtestcriterion
+singleTtestCriterion
 singleCohenCriterion
 singleTtestDPrime
 singleCohenDPrime
 
-crowdTtestcriterion
+crowdTtestCriterion
 crowdCohenCriterion
 crowdTtestDPrime
 crowdCohenDPrime
 ```
 
 ### R Squared
-```{r}
+```{r echo=FALSE, comment=NA}
 criterionRsquared
 ```
 
 ### Noise
 ### dPrime ANOVA
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 noiseDprimeAnova
 ```
 
 ### Criterion ANOVA
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 noiseCriterionAnova
 ```
 
 ### dPrime eta Squared
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 noiseDprimeEtaSq
 ```
 
 ### Criterion eta Squared
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 noiseCriterionEtaSq
 ```
 
 ### T Tests & Cohen's D
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 groupSizeGrouped <- allSupplemental %>% 
   dplyr::filter(Experiment == "noise") %>% 
   dplyr::group_by(ParticipantNumber, GroupSize) %>% 
@@ -455,12 +455,12 @@ crowd <- groupSizeGrouped %>%
 singleCohenDPrime<- lsr::cohensD(single$meanDprime)
 singleTtestDPrime <- t.test(single$meanDprime)
 singleCohenCriterion<- lsr::cohensD(single$meanCriterion)
-singleTtestcriterion <- t.test(single$meanCriterion)
+singleTtestCriterion <- t.test(single$meanCriterion)
 
 crowdCohenDPrime<- lsr::cohensD(crowd$meanDprime)
 crowdTtestDPrime <- t.test(crowd$meanDprime)
 crowdCohenCriterion<- lsr::cohensD(crowd$meanCriterion)
-crowdTtestcriterion <- t.test(crowd$meanCriterion)  
+crowdTtestCriterion <- t.test(crowd$meanCriterion)  
 
 corrData <- cbind(single, crowd) %>% 
   dplyr::ungroup() %>% 
@@ -479,87 +479,87 @@ corrData <- cbind(single, crowd) %>%
 criterionLinearMod <- lm(singleC ~ crowdC, data = corrData)
 criterionRsquared <- summary(criterionLinearMod)$r.squared
 
-singleTtestcriterion
+singleTtestCriterion
 singleCohenCriterion
 singleTtestDPrime
 singleCohenDPrime
 
-crowdTtestcriterion
+crowdTtestCriterion
 crowdCohenCriterion
 crowdTtestDPrime
 crowdCohenDPrime
 ```
 
 ### R Squared
-```{r}
+```{r echo=FALSE, comment=NA}
 criterionRsquared
 ```
 
 ## Crowd Size (Intensity Collapsed)
 ### dPrime ANOVA
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 groupSizeIntensityCollapsedDprimeAnova
 ```
 
 ### Criterion ANOVA
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 groupSizeIntensityCollapsedCriterionAnova
 ```
 
 ### dPrime eta Squared
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 groupSizeIntensityCollapsedDprimeEtaSq
 ```
 
 ### Criterion eta Squared
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 groupSizeIntensityCollapsedCriterionEtaSq
 ```
 
 ## Crowd Size (Group Collapsed)
 ### dPrime ANOVA
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 groupSizeGroupCollapsedDprimeAnova
 ```
 
 ### Criterion ANOVA
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 groupSizeGroupCollapsedCriterionAnova
 ```
 
 ### dPrime eta Squared
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 groupSizeGroupCollapsedDprimeEtaSq
 ```
 
 ### Criterion eta Squared
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 groupSizeGroupCollapsedCriterionEtaSq
 ```
 
 ## Identity
 ### dPrime ANOVA
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 identityDprimeAnova
 ```
 
 ### Criterion ANOVA
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 identityCriterionAnova
 ```
 
 ### dPrime eta Squared
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 identityDprimeEtaSq
 ```
 
 ### Criterion eta Squared
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 identityCriterionEtaSq
 ```
 
 ### T Tests & Cohen's D
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 groupSizeGrouped <- allSupplemental %>% 
   dplyr::filter(
     Experiment == "identity",
@@ -662,24 +662,24 @@ heterogeneousCrowd <- groupSizeGrouped %>%
 singleCohenDPrime<- lsr::cohensD(single$meanDprime)
 singleTtestDPrime <- t.test(single$meanDprime)
 singleCohenCriterion<- lsr::cohensD(single$meanCriterion)
-singleTtestcriterion <- t.test(single$meanCriterion)
+singleTtestCriterion <- t.test(single$meanCriterion)
 
 heterogeneousCrowdCohenDPrime<- lsr::cohensD(heterogeneousCrowd$meanDprime)
 heterogeneousCrowdTtestDPrime <- t.test(heterogeneousCrowd$meanDprime)
 heterogeneousCrowdCohenCriterion<- lsr::cohensD(heterogeneousCrowd$meanCriterion)
-heterogeneousCrowdTtestcriterion <- t.test(heterogeneousCrowd$meanCriterion)  
+heterogeneousCrowdTtestCriterion <- t.test(heterogeneousCrowd$meanCriterion)  
 
 homogeneousCrowdCohenDPrime<- lsr::cohensD(homogeneousCrowd$meanDprime)
 homogeneousCrowdTtestDPrime <- t.test(homogeneousCrowd$meanDprime)
 homogeneousCrowdCohenCriterion<- lsr::cohensD(homogeneousCrowd$meanCriterion)
-homogeneousCrowdTtestcriterion <- t.test(homogeneousCrowd$meanCriterion)  
+homogeneousCrowdTtestCriterion <- t.test(homogeneousCrowd$meanCriterion)  
 
-singleTtestcriterion
+singleTtestCriterion
 singleCohenCriterion
 singleTtestDPrime
 singleCohenDPrime
 
-crowdTtestcriterion
+crowdTtestCriterion
 crowdCohenCriterion
 crowdTtestDPrime
 crowdCohenDPrime
@@ -687,27 +687,27 @@ crowdCohenDPrime
 
 ## Gender By Group Size (No Mixed Group)
 ### dPrime ANOVA
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 genderGroupSizeDprimeAnova
 ```
 
 ### Criterion ANOVA
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 genderGroupSizeCriterionAnova
 ```
 
 ### dPrime eta Squared
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 genderGroupSizeDprimeEtaSq
 ```
 
 ### Criterion eta Squared
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 genderGroupSizeCriterionEtaSq
 ```
 
 ### T Tests & Cohen's D
-```{r}
+```{r, echo=FALSE, comment=NA}
 groupSizeGrouped <- allSupplemental %>% 
   dplyr::filter(
     Experiment == "gender",
@@ -787,36 +787,48 @@ crowdFemale <- crowd %>%
 
 singleFemaleTtestCriterion <- t.test(singleFemale)
 singleFemaleCohenCriterion <- lsr::cohensD(singleFemale)
-crowdFemaleTTestCriterion <- t.test(crowdFemale)
+crowdFemaleTtestCriterion <- t.test(crowdFemale)
 crowdFemaleCohenCriterion <- lsr::cohensD(crowdFemale)
 
 singleMaleTtestCriterion <- t.test(singleMale)
 singleMaleCohenCriterion <- lsr::cohensD(singleMale)
-crowdMaleTTestCriterion <- t.test(crowdMale)
+crowdMaleTtestCriterion <- t.test(crowdMale)
 crowdMaleCohenCriterion <- lsr::cohensD(crowdMale)
+maleTtestCriterion <- t.test(singleMale, crowdMale, paired = TRUE)
+maleCohenCriterion <- lsr::cohensD(singleMale, crowdMale)
+
+singleFemaleTtestCriterion <- t.test(singleFemale)
+singleFemaleCohenCriterion <- lsr::cohensD(singleFemale)
+crowdFemaleTtestCriterion <- t.test(crowdFemale)
+crowdFemaleCohenCriterion <- lsr::cohensD(crowdFemale)
+
+singleMaleTtestCriterion
+singleMaleCohenCriterion
+crowdMaleTtestCriterion
+crowdMaleCohenCriterion
+maleTtestCriterion
+maleCohenCriterion
+
 ```
 
 
 ## All Gender Combinations & Low-High Intensity Split
 ### dPrime ANOVA
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 genderDprimeAnova
 ```
 
 ### Criterion ANOVA
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 genderCriterionAnova
 ```
 
 ### dPrime eta Squared
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 genderDprimeEtaSq
 ```
 
 ### Criterion eta Squared
-```{r echo=FALSE}
+```{r echo=FALSE, comment=NA}
 genderCriterionEtaSq
 ```
-
-
-

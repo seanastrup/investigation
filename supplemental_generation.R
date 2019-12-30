@@ -68,11 +68,11 @@ MergeFiles <- function(investigation, fields) {
         df$ParticipantNumber <- participantNumber  
       }
       
-      
       return(df)
     })
   
   mergedFiles <- do.call(rbind.data.frame, mergeList)
+  setwd("~/Projects/merge")
   
   return(mergedFiles)
 }
@@ -312,9 +312,9 @@ allSupplemental <-
   ) %>%
   dplyr::select(
     Experiment, ParticipantNumber, GroupSize, Intensity, Noise, 
-    IdentityCondition, Gender, dPrime, Criterion, TotalHits, TotalFalseAlarms, 
-    TotalMisses, TotalCorrectRejections, HitRate, FalseAlarmRate, 
-    HitRateReplaced, FalseAlarmReplaced, GroupType, IntensityType
+    IdentityCondition, Gender, GroupType, IntensityType,dPrime, Criterion, 
+    TotalHits, TotalFalseAlarms, TotalMisses, TotalCorrectRejections, HitRate, 
+    FalseAlarmRate, HitRateReplaced, FalseAlarmReplaced
   )
 
 allSupplemental$ParticipantNumber <- as.factor(allSupplemental$ParticipantNumber)
@@ -327,9 +327,188 @@ allSupplemental$Gender <- as.factor(allSupplemental$Gender)
 allSupplemental$GroupType <- as.factor(allSupplemental$GroupType)
 allSupplemental$IntensityType <- as.factor(allSupplemental$IntensityType)
 
+#############################
+# Confidence Intervals
+GetConfidenceIntervals <- function(df, condition) {
+  groupByVars <- rlang::syms(condition)
+  
+  confidenceIntervalDf <- df %>% 
+    dplyr::group_by(!!! groupByVars) %>% 
+    dplyr::summarise(
+      mean_dPrime = mean(dPrime),
+      mean_Criterion = mean(Criterion),
+      stdDprime = sd(dPrime),
+      stdCriterion = sd(Criterion),
+      numObs = n()
+    ) %>% 
+    dplyr::mutate(
+      intensityPercentage = ifelse(
+        Intensity == 1, 2,
+        ifelse(
+          Intensity == 10, 20,
+          ifelse(
+            Intensity == 20, 40, 
+            ifelse(
+              Intensity == 30, 60,
+              ifelse(
+                Intensity == 40, 80,
+                ifelse(
+                  Intensity == 50, 100,
+                  NA
+                )
+              )
+            )
+          )
+        )
+      ),
+      errorDprime = qnorm(0.975) * stdDprime / sqrt(numObs),
+      errorCriterion = qnorm(0.975) * stdCriterion / sqrt(numObs),
+      dPrimeLow95 = mean_dPrime - errorDprime,
+      dPrimeHigh95 = mean_dPrime + errorDprime,
+      CriterionLow95 = mean_Criterion - errorCriterion,
+      CriterionHigh95 = mean_Criterion + errorCriterion,
+      SEMdPrime = stdDprime / sqrt(numObs),
+      SEMCriterion = stdCriterion / sqrt(numObs)
+    ) %>%
+    dplyr::select(
+      !!! groupByVars, intensityPercentage, mean_dPrime, dPrimeLow95,
+      dPrimeHigh95, mean_Criterion, CriterionLow95, CriterionHigh95, SEMdPrime,
+      SEMCriterion
+    )
+  
+  return(confidenceIntervalDf)
+}
 
+GetOverallMeansConfidenceIntervals <- function(df, condition, overallMeanGrouping) {
+  groupByVars <- rlang::syms(condition)
+  overallGroups <- rlang::syms(overallMeanGrouping)
+  
+  confidenceIntervalDf <- df %>% 
+    dplyr::group_by(!!! groupByVars) %>% 
+    dplyr::summarise(
+      mean_dPrime = mean(dPrime),
+      mean_Criterion = mean(Criterion),
+      stdDprime = sd(dPrime),
+      stdCriterion = sd(Criterion),
+      numObs = n()
+    ) %>% 
+    dplyr::mutate(
+      intensityPercentage = ifelse(
+        Intensity == 1, 2,
+        ifelse(
+          Intensity == 10, 20,
+          ifelse(
+            Intensity == 20, 40, 
+            ifelse(
+              Intensity == 30, 60,
+              ifelse(
+                Intensity == 40, 80,
+                ifelse(
+                  Intensity == 50, 100,
+                  NA
+                )
+              )
+            )
+          )
+        )
+      )
+    ) 
+  
+  overallMean <- supplementalCrowdVsSingle %>% 
+    dplyr::group_by(!!! overallGroups) %>% 
+    
+    dplyr::summarize(
+      overall_mean_dPrime = mean(dPrime), 
+      overall_mean_Criterion = mean(Criterion)
+    )
+  
+  data <- dplyr::inner_join(confidenceIntervalDf, overallMean) %>% 
+    dplyr::mutate(
+      errorDprime = qnorm(0.975) * stdDprime / sqrt(numObs),
+      errorCriterion = qnorm(0.975) * stdCriterion / sqrt(numObs),
+      V2_dPrimeLow95 = overall_mean_dPrime - errorDprime,
+      V2_dPrimeHigh95 = overall_mean_dPrime + errorDprime,
+      V2_CriterionLow95 = overall_mean_Criterion - errorCriterion,
+      V2_CriterionHigh95 = overall_mean_Criterion + errorCriterion
+    )
+  
+  return(data)
+}
+
+confidenceIntervalCrowdVsSingle <- GetConfidenceIntervals(
+  supplementalCrowdVsSingle, 
+  c("GroupSize", "Intensity")
+)
+
+confidenceIntervalFear <- GetConfidenceIntervals(
+  supplementalFear,
+  c("GroupSize", "Intensity")
+)
+
+
+overallConfidenceIntervalCrowdVsSingle <- GetOverallMeansConfidenceIntervals(
+  supplementalCrowdVsSingle, 
+  c("GroupSize", "Intensity"), c("GroupSize")
+)
 
 #############################
 # Write all supplementals to csv
-# write.csv(allSupplemental, "test_delete.csv", row.names = FALSE)
+write.csv(
+  allSupplemental, 
+  "supplementals/investigation_1_data_supplemental.csv", 
+  row.names = FALSE
+)
+write.csv(
+  confidenceIntervalCrowdVsSingle, 
+  "supplementals/plot_info/crowd_vs_single_plot_info.csv", 
+  row.names = FALSE
+)
+
+
+
+
+ggplot(
+  data = overallConfidenceIntervalCrowdVsSingle, 
+  aes(
+    x = intensityPercentage, 
+    y = mean_Criterion, 
+    group = GroupSize, 
+    color = GroupSize
+  )
+) + 
+  ggplot2::geom_line() + 
+  ggplot2::geom_errorbar(
+    aes(
+      ymin = V2_CriterionLow95, 
+      ymax = V2_CriterionHigh95
+    ), 
+    width = 0.2
+  )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
