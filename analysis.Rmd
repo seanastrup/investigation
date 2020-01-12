@@ -1,0 +1,175 @@
+---
+title: "RT Analysis Output"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, comment = NA)
+knitr::opts_chunk$set(dev = 'pdf')
+knitr::opts_chunk$set(fig.width=5 , fig.height=3) 
+```
+
+```{r results='hide', include=FALSE}
+suppressMessages({
+  library(sjstats)
+  library(tidyverse)
+  library(readxl)
+  library(lsr)
+  source("supplemental_generation.R")
+})
+```
+
+## Crowd Vs. Single
+
+### Anova
+```{r}
+crowdVsSingleRTAnova
+```
+
+### Plots
+```{r}
+crowdVsSingleRTEmotionPlot
+```
+
+```{r}
+crowdVsSingleRTIntensityPlot
+```
+
+```{r}
+crowdVsSingleRTGroupSizePlot
+```
+
+
+## Fear
+### Anova
+```{r}
+fearRTAnova
+```
+
+### Plots
+```{r}
+fearRTEmotionPlot
+```
+
+```{r}
+fearRTIntenstiyPlot
+```
+
+```{r}
+fearRTGroupSizePlot
+```
+
+## Noise
+### Anova
+```{r}
+noiseRTAnova
+```
+
+### Plots
+```{r}
+noiseRTEmotionPlot
+```
+
+
+```{r}
+noiseRTNoisePlot
+```
+
+```{r}
+noiseRTGroupSizePlot
+```
+
+## Group Size
+### Anova
+```{r}
+groupSizeRTAnova
+```
+
+### Plots
+```{r}
+groupSizeRTEmotionPlot
+```
+
+```{r}
+groupSizeRTIntensityPlot
+```
+
+```{r}
+groupSizeRTGroupSizePlot
+```
+
+## Identity
+### Anova
+```{r}
+identityRTAnova
+```
+
+### Plots
+```{r}
+identityRTEmotionPlot
+```
+
+```{r}
+identityRTIntensityPlot
+```
+
+```{r}
+identityRTConditionPlot
+```
+
+## Gender
+### Anova
+```{r}
+genderRTAnova
+```
+
+### Plots
+```{r}
+genderRTEmotionPlot
+```
+
+```{r}
+genderRTIntensityPlot
+```
+
+```{r}
+genderRTGroupSizePlot
+```
+
+```{r}
+genderRTGenderPlot
+```
+
+## RT & Criteiron Correlations
+```{r}
+crowdVsSingleRTCriterionCorrelation_Plot
+```
+
+```{r}
+fearRTCriterionCorrelation_Plot
+```
+
+```{r}
+noiseRTCriterionCorrelation_Plot
+```
+
+```{r}
+groupSizeRTCriterionCorrelation_Plot
+```
+
+```{r}
+identityRTCriterionCorrelation_Plot
+```
+
+```{r}
+genderRTCriterionCorrelation_Plot
+```
+
+
+
+
+
+
+
+
+

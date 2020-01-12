@@ -311,17 +311,27 @@ GetFearAnova <- function(fearDF, outlierByParticipant = FALSE) {
       dplyr::summarise(meanRT = mean(ResponseTime))  
   }
   
+  fearRT$ParticipantNumber <- as.factor(fearRT$ParticipantNumber)
+  fearRT$GroupSize <- as.factor(fearRT$GroupSize)
+  fearRT$Emotion <- as.factor(fearRT$Emotion)
+  fearRT$Intensity <- as.factor(fearRT$Intensity)
+  
   anova <- 
-    summary(
-      aov(
-        meanRT ~ Emotion * Intensity * GroupSize + Error(
-          ParticipantNumber / Emotion * Intensity * GroupSize
-        ), 
-        data = fearRT
-      )
+    aov(
+      meanRT ~ Emotion * Intensity * GroupSize + Error(
+        ParticipantNumber / Emotion * Intensity * GroupSize
+      ), 
+      data = fearRT
     )
   
-  return(anova)
+  anovaSummary <- summary(anova)
+  
+  outList <- list(
+    anova = anova,
+    anovaSummary = anovaSummary
+  )
+  
+  return(outList)
 }
 
 GetGenderAnova <- function(genderDF, outlierByParticipant = FALSE) {
