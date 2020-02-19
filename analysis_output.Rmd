@@ -15,6 +15,7 @@ suppressMessages({
   library(tidyverse)
   library(readxl)
   library(lsr)
+  library(compute.es)
   source("supplemental_generation.R")
 })
 ```
@@ -399,15 +400,16 @@ corrData <- cbind(single, crowd) %>%
 criterionLinearMod <- lm(singleC ~ crowdC, data = corrData)
 criterionRsquared <- summary(criterionLinearMod)$r.squared
 
-singleTtestCriterion
-singleCohenCriterion
-singleTtestDPrime
-singleCohenDPrime
 
-crowdTtestCriterion
-crowdCohenCriterion
-crowdTtestDPrime
-crowdCohenDPrime
+# singleTtestCriterion
+# singleCohenCriterion
+# singleTtestDPrime
+# singleCohenDPrime
+# 
+# crowdTtestCriterion
+# crowdCohenCriterion
+# crowdTtestDPrime
+# crowdCohenDPrime
 ```
 
 ### R Squared
@@ -683,6 +685,26 @@ crowdTtestCriterion
 crowdCohenCriterion
 crowdTtestDPrime
 crowdCohenDPrime
+```
+
+### Identity Corrected DPrime T-Tests
+```{r}
+intensity1DPrimeTtest
+intensity10DPrimeTtest
+intensity20DPrimeTtest
+intensity30DPrimeTtest
+intensity40DPrimeTtest
+intensity50DPrimeTtest
+```
+
+### Identity Corrected Criterion T-Tests
+```{r}
+intensity1CriterionTtest
+intensity10CriterionTtest
+intensity20CriterionTtest
+intensity30CriterionTtest
+intensity40CriterionTtest
+intensity50CriterionTtest
 ```
 
 ## Gender By Group Size (No Mixed Group)
